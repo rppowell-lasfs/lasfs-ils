@@ -46,7 +46,7 @@ def isValidItemNumber(cell) {
     )
 }
 def getValidItemNumber(cell) {
-    return (int) cell.numericCellValue
+    return cell.numericCellValue as int
 }
 
 def isValidLocation(cell) {
@@ -59,6 +59,10 @@ def isValidType(cell) {
 
 def isValidTitle(cell) {
     return ((cell != null) && (cell.getCellTypeEnum() == CellType.STRING))
+}
+
+def getValidTitle(cell) {
+    return cell.stringCellValue as String
 }
 
 def isValidAuthor(cell) {
@@ -78,19 +82,23 @@ def processRow(row) {
     for (cell in row.cellIterator()) {
         def value = ''
 
-        switch(cell.getCellTypeEnum()) {
-            case CellType.STRING:
-                value = cell.stringCellValue
-                break
-            case CellType.NUMERIC:
-                value = cell.numericCellValue
-                break
-            default:
-                value = ''
-        }
-        rowData << [("${header[cell.columnIndex]}".toString()): value]
         if ((cell.columnIndex == 7) && (isValidItemNumber(cell))) {
-            rowData["${header[cell.columnIndex]}".toString()] = getValidItemNumber(cell)
+            //rowData["${header[cell.columnIndex]}".toString()] = getValidItemNumber(cell)
+            rowData["number"] = getValidItemNumber(cell)
+        } else if ((cell.columnIndex == 9) && (isValidTitle(cell))) {
+            rowData["title"] = getValidTitle(cell)
+        } else {
+            switch(cell.getCellTypeEnum()) {
+                case CellType.STRING:
+                    value = cell.stringCellValue
+                    break
+                case CellType.NUMERIC:
+                    value = cell.numericCellValue
+                    break
+                default:
+                    value = ''
+            }
+            rowData << [("${header[cell.columnIndex]}".toString()): value]
         }
     }
     return rowData
