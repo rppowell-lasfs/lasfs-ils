@@ -3,11 +3,14 @@ package org.lasfs.ils.legacy.xlsimport
 import groovy.transform.Canonical
 
 /**
- * Created by rpowell on 11/18/16.
+ * Created by rpowell on 12/9/16.
  */
-
 @Canonical
-class BookMagazineAudioItem {
+class BookMagazineAudioEntry {
+    Date outDate
+    Date dueDate
+    String librarian
+    Date returnDate
     String itemLocation
     String itemTitle
     String itemType

@@ -1,5 +1,7 @@
 package org.lasfs.ils.legacy.xlsimport
 
+import groovy.transform.Field
+
 /**
  * Created by rpowell on 11/18/16.
  */
@@ -14,31 +16,69 @@ import org.apache.poi.ss.usermodel.CellType
 
 println System.getProperty("user.dir");
 
-f= "../../../../../../../" + "Books Magazines Audio - mini.xls"
+f= "../../../../../../../../" + "Books Magazines Audio.xls"
 def excelFile = new File(f)
 
 InputStream inputStream = new FileInputStream(excelFile)
 Workbook wb = WorkbookFactory.create(inputStream)
-Sheet sheet = wb.getSheetAt(0)
+Sheet sheet = wb.getSheet('Books')
 
-def values = []
-def header = []
+@Field def header = []
+@Field def headerFlag
 
-for (cell in sheet.getRow(0).cellIterator()) {
-    println cell.stringCellValue
-    header << cell.stringCellValue
+@Field def row_values = []
+
+
+def validateHeader(sheet) {
+    for (cell in sheet.getRow(0).cellIterator()) {
+        header << cell.stringCellValue
+    }
+    println "Header:"
+    println header
+    headerFlag = true
 }
 
-def headerFlag = true
-for (row in sheet.rowIterator()) {
-    if (headerFlag) {
-        headerFlag = false
-        continue
-    }
+def isValidItemNumber(cell) {
+    return (
+            (cell != null) &&
+            (cell.getCellTypeEnum() == CellType.NUMERIC) &&
+            (((int)cell.numericCellValue) == cell.numericCellValue)
+    )
+}
+def getValidItemNumber(cell) {
+    return (int) cell.numericCellValue
+}
+
+def isValidLocation(cell) {
+    return ((cell != null) && (cell.getCellTypeEnum() == CellType.STRING))
+}
+
+def isValidType(cell) {
+    return ((cell != null) && (cell.getCellTypeEnum() == CellType.STRING))
+}
+
+def isValidTitle(cell) {
+    return ((cell != null) && (cell.getCellTypeEnum() == CellType.STRING))
+}
+
+def isValidAuthor(cell) {
+    return ((cell != null) && (cell.getCellTypeEnum() == CellType.STRING))
+}
+
+def isValidCoAuthor(cell) {
+    return ((cell != null) && (cell.getCellTypeEnum() == CellType.STRING))
+}
+
+def isValidComments(cell) {
+    return ((cell != null) && (cell.getCellTypeEnum() == CellType.STRING))
+}
+
+def processRow(row) {
     def rowData = [:]
     for (cell in row.cellIterator()) {
         def value = ''
-        switch(cell.cellType) {
+
+        switch(cell.getCellTypeEnum()) {
             case CellType.STRING:
                 value = cell.stringCellValue
                 break
@@ -48,10 +88,26 @@ for (row in sheet.rowIterator()) {
             default:
                 value = ''
         }
-        rowData << ["${header[cell.columnIndex]}": value]
+        rowData << [("${header[cell.columnIndex]}".toString()): value]
+        if ((cell.columnIndex == 7) && (isValidItemNumber(cell))) {
+            rowData["${header[cell.columnIndex]}".toString()] = getValidItemNumber(cell)
+        }
     }
-    values << rowData
+    return rowData
 }
 
-//Iterator<Row> rowIt = sheet.rowIterator()
-//Row row = rowIt.next()
+validateHeader(sheet)
+
+for (row in sheet.rowIterator()) {
+    if (headerFlag) {
+        headerFlag = false
+        continue
+    }
+    row_values << processRow(row)
+}
+
+println row_values.size()
+
+for (r in row_values[0..9]) {
+    println r
+}
