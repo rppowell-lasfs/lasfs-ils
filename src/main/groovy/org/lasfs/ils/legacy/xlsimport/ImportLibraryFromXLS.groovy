@@ -29,9 +29,8 @@ def catalog = new Catalog()
 @Field def header = []
 @Field def headerFlag
 
-@Field def row_values = []
-
-def rowProcessor = new RowProcessor()
+@Field def validItems = []
+@Field def invalidItems = []
 
 def validateHeader(sheet) {
     for (cell in sheet.getRow(0).cellIterator()) {
@@ -44,18 +43,20 @@ def validateHeader(sheet) {
 
 validateHeader(sheet)
 
+def rowProcessor = new RowProcessor(header)
+
 for (row in sheet.rowIterator()) {
     if (headerFlag) {
         headerFlag = false
         continue
     }
-    row_values << rowProcessor.processRow(row, header, catalog)
+    rowProcessor.processRow(row, catalog, invalidItems)
 }
 
-println row_values.size()
+println "Number of items processed: " + catalog.items.size()
 
-for (r in row_values[0..9]) {
+for (r in catalog.items[0..9]) {
     println r
 }
 
-catalog.print_catalog()
+//catalog.print_catalog()
