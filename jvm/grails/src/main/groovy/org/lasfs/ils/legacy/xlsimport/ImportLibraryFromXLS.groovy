@@ -16,7 +16,7 @@ import org.apache.poi.ss.usermodel.CellType
 
 println System.getProperty("user.dir");
 
-f= "../../../../../../../../" + "Books Magazines Audio.xls"
+f= "../../../../../../../../../" + "Books Magazines Audio.xls"
 def excelFile = new File(f)
 
 InputStream inputStream = new FileInputStream(excelFile)
