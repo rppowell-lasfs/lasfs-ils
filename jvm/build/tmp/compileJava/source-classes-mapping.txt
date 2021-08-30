@@ -1,0 +1,18 @@
+org/lasfs/ils/legacy/xlsimport/BookLoanEntry.java
+ org.lasfs.ils.legacy.xlsimport.BookLoanEntry
+org/lasfs/ils/legacy/xlsimport/BookEntry.java
+ org.lasfs.ils.legacy.xlsimport.BookEntry
+org/lasfs/ils/main/Main.java
+ org.lasfs.ils.main.Main
+org/lasfs/ils/main/IlsConfiguration.java
+ org.lasfs.ils.main.IlsConfiguration
+org/lasfs/ils/database/IlsItem.java
+ org.lasfs.ils.database.IlsItem
+org/lasfs/ils/database/IlsDatabase.java
+ org.lasfs.ils.database.IlsDatabase
+org/lasfs/ils/legacy/xlsimport/BookMagazineAudioEntry.java
+ org.lasfs.ils.legacy.xlsimport.BookMagazineAudioEntry
+org/lasfs/ils/legacy/xlsimport/ImportLibraryFromXLS.java
+ org.lasfs.ils.legacy.xlsimport.ImportLibraryFromXLS
+org/lasfs/ils/legacy/xlsimport/BooksImporter.java
+ org.lasfs.ils.legacy.xlsimport.BooksImporter
